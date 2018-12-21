@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{menu::header}"></div>
+    <script>
+        $(document).ready(function () {
+            $('#carttable').DataTable({
+                "paging": false,
+                "info": false,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": false
+            });
+        });
+    </script>
+</head>
+<body>
+
+<nav th:replace="~{menu::navigation}"></nav>
+
+<div id="content" class="container">
+    <div id="cartcontentmissing" th:if="${cart.isEmpty()}">
+        <h1>Uw mandje is leeg</h1>
+    </div>
+    <div id="cartcontent" th:unless="${cart.isEmpty()}">
+        <h1>Uw order</h1>
+        <table id="carttable" class="table" cellspacing="0" style="width:100%">
+            <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Prijs</th>
+                <th>Hoeveelheid</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${cart.keySet()}" th:class="${(productStat.odd)?'odd':'even'}">
+                <td><span th:text="${product.name}"></span></td>
+                <td><span th:text="'€' + ${#numbers.formatDecimal(product.price, 1, 2)}"></span></td>
+                <td><span th:text="${cart.get(product)}"></span></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><span th:text="'totaal: €'+${#numbers.formatDecimal(total,1,2)}"></span></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div id="confirmation" th:unless="${cart.isEmpty()}">
+        <form method="post" th:action="@{~/cart}" th:object="${user}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" th:field="*{email}" class="form-control" id="inputEmail" placeholder="john.doe@email.be">
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:class="error"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputName">Naam</label>
+                    <input type="text" th:field="*{name}" class="form-control" id="inputName" placeholder="John Doe">
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:class="error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputAddress">Adres</label>
+                <input type="text" th:field="*{address}" class="form-control" id="inputAddress" placeholder="Nieuwstraat 1">
+                <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" th:class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="inputBus">Bus</label>
+                <input type="text" th:field="*{bus}" class="form-control" id="inputBus" placeholder="B2">
+                <span th:if="${#fields.hasErrors('bus')}" th:errors="*{bus}" th:class="error"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">Woonplaats</label>
+                    <input type="text" th:field="*{city}" class="form-control" id="inputCity">
+                    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" th:class="error"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputZip">Postcode</label>
+                    <input type="text" th:field="*{zip}" class="form-control" id="inputZip">
+                    <span th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}" th:class="error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" th:field="*{agreed}" type="checkbox" id="inputConfirm">
+                    <label class="form-check-label" for="inputConfirm">
+                        Ik ga akkoord met alle voorwaarden
+                    </label>
+                    <span th:if="${#fields.hasErrors('agreed')}" th:errors="*{agreed}" th:class="error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" th:field="submit" th:text="Bevestigen"></button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+</body>
+</html>

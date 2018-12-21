@@ -1,0 +1,33 @@
+#main_nav{
+    background-color: #44d8c1;!important;
+}
+#content{
+    padding-top: 60px;
+}
+#productcard{
+    margin-bottom: 10px;
+}
+#productcard img{
+    height: 200px;
+    width: auto;
+}
+.btn{
+    background-color: #44d8c1;
+    color: black;
+    border: 1px solid black;
+}
+.btn:hover{
+    background-color: #8effe2;
+    color: black;
+    border: 1px solid black;
+}
+.odd{
+    background-color: white;
+}
+.even{
+    background-color: lightgray;
+}
+.error{
+    color: red;
+    font-weight: bolder;
+}
